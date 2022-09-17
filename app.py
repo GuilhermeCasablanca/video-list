@@ -66,77 +66,45 @@ def video():
 @login_required
 def play():
     if request.method == "POST":
-        video = request.form.get('video')
-        if (video == "stream1"):
-            x=1
-        elif (video == "stream2") :
-            x=1
-        elif (video == "stream3") :
-            x=1
-        elif (video == "stream4") :
-            x=1
-        elif (video == "stream5") :
-            x=1
-        elif (video == "stream6") :
-            x=1
-    return render_template('video.html', data=VideoModel.query.all())
+        stream = request.form.get('video')
+
+        query = VideoModel.query.filter_by(stream=stream).first()
+        query.isactive = 1
+        db.session.commit()
+
+    return redirect(url_for('video'))
 
 @app.route('/stop', methods=['POST', 'GET'])
 @login_required
 def stop():
     if request.method == "POST":
-        video = request.form.get('video')
-        if (video == "stream1"):
-            x=1
-        elif (video == "stream2") :
-            x=1
-        elif (video == "stream3") :
-            x=1
-        elif (video == "stream4") :
-            x=1
-        elif (video == "stream5") :
-            x=1
-        elif (video == "stream6") :
-            x=1
-    return render_template('video.html', data=VideoModel.query.all())
+        stream = request.form.get('video')
+
+        query = VideoModel.query.filter_by(stream=stream).first()
+        query.isactive = 0
+        db.session.commit()
+
+    return redirect(url_for('video'))
 
 @app.route('/restart', methods=['POST', 'GET'])
 @login_required
 def restart():
     if request.method == "POST":
-        video = request.form.get('video')
-        if (video == "stream1"):
-            x=1
-        elif (video == "stream2") :
-            x=1
-        elif (video == "stream3") :
-            x=1
-        elif (video == "stream4") :
-            x=1
-        elif (video == "stream5") :
-            x=1
-        elif (video == "stream6") :
-            x=1
-    return render_template('video.html', data=VideoModel.query.all())
+        stream = request.form.get('video')
+        
+        query = VideoModel.query.filter_by(stream=stream).first()
+        query.isactive = 1
+        db.session.commit()
+
+    return redirect(url_for('video'))
 
 @app.route('/estatisticas', methods=['POST', 'GET'])
 @login_required
 def estatisticas():
     if request.method == "POST":
-        video = request.form.get('video')
-        if (video == "stream1"):
-            x=1
-        elif (video == "stream2") :
-            x=1
-        elif (video == "stream3") :
-            x=1
-        elif (video == "stream4") :
-            x=1
-        elif (video == "stream5") :
-            x=1
-        elif (video == "stream6") :
-            x=1
-    return render_template('video.html', data=VideoModel.query.all())
+        stream = request.form.get('video')
+        
+    return redirect(url_for('video'))
 
 
 # Main
