@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Videos Casablanca</title>
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/template.css') }}">
+  {% block head %}
+  {% endblock %}
+</head>
+
+<body>
+  <div class="menu">
+    {% if current_user.is_authenticated and current_user.isadmin %}
+      <a href="{{ url_for('admin_bp.admin') }}" id="admin">Admin</a>
+    {% endif %}
+
+    {% if current_user.is_authenticated %}
+      Usuário: {{ current_user.username }}
+      <a href="{{ url_for('login_bp.logout') }}">LogOut</a>
+    {% endif %}
+  </div>
+
+  <div class="content">
+    {% block content %}
+    {% endblock %}
+  </div>
+</body>
+
+</html>

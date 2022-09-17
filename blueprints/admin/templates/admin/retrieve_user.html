@@ -1,0 +1,41 @@
+{% extends "template.html" %}
+{% block content %}
+
+<p>
+<h2>Usuários cadastrados</h2>
+</p>
+
+<div id="" class="element" style="width:50%">
+  <hr>
+  {% for user in data %}
+  <p>{{user.username}}</p>
+  <p>{{user.email}}</p>
+  <p>admin {{user.isadmin}}</p>
+
+  <table>
+    <tr>
+      <td>
+        <form action="{{ url_for('admin_bp.update_email') }}" method="GET">
+          <input type="hidden" name="id" value="{{user.id}}">
+          <input type="submit" value="Mudar email">
+        </form>
+      </td>
+      <td>
+        <form action="{{ url_for('admin_bp.update_password') }}" method="GET">
+          <input type="hidden" name="id" value="{{user.id}}">
+          <input type="submit" value="Mudar senha">
+        </form>
+      </td>
+      <td>
+        <form action="{{ url_for('admin_bp.delete_user') }}" method="GET">
+          <input type="hidden" name="id" value="{{user.id}}">
+          <input type="submit" value="Deletar">
+        </form>
+      </td>
+    </tr>
+  </table>
+  <hr>
+  {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "template.html" %}
+
+{% block head %}
+<style>
+  .center {
+    margin: auto;
+    width: 50%;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="center">
+  <h2 class="title">Login</h2>
+
+  <div class="form">
+    {% from "_formhelpers.html" import render_field %}
+    <form method="post" class="form">
+      <fieldset>
+        {{ form.csrf_token }}
+        {{ render_field(form.username) }}
+        {{ render_field(form.password) }}
+        {{ form.submit }}
+      </fieldset>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}

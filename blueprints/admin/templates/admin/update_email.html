@@ -1,0 +1,18 @@
+{% extends "template.html" %}
+{% block content %}
+
+<h2>Mudar email</h2>
+Digite o novo email: <br>
+
+<div class="form">
+  {% from "_formhelpers.html" import render_field %}
+  <form method="POST">
+    <fieldset>
+      {{ form.csrf_token }}
+      {{ render_field(form.email) }}
+      {{ form.submit }}
+    </fieldset>
+  </form>
+</div>
+
+{% endblock %}
