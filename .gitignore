@@ -1,6 +1,5 @@
-# Videos hls
-*.m3u8
-*.ts
+# Arquivos de video
+videos/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

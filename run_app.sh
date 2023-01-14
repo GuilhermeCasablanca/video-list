@@ -1,2 +1,2 @@
 #!/bin/bash
-screen -S "MV" -d -m /opt/video-list-main/app.sh
+screen -S "MV" -d -m /opt/video-list-main/App.sh

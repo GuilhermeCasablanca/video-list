@@ -2,88 +2,34 @@
 {% block head %}
 <link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
 <script src="//vjs.zencdn.net/7.10.2/video.min.js"></script>
-<script src="https://unpkg.com/@videojs/http-streaming/dist/videojs-http-streaming.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://unpkg.com/@videojs/http-stream0ing/dist/videojs-http-stream0ing.js"></script>
 
 <style>
     .grid-container {
         display: grid;
-        grid-template-columns: auto auto auto;
+        grid-template-columns: {{data2.orientacao}};
         gap: 10px;
         padding: 10px;
         margin: auto;
         width: fit-content;
     }
-    .button {
-        background-color: rgb(55, 55, 55);
-        border: none;
-        color: white;
-        padding: 5px 10px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 2px 2px;
-        cursor: pointer;
-    }
 </style>
-
+</head>
 {% endblock %}
 
 {% block content %}
-
 <div class="grid-container">
-    {% for video in data %}
-    <div class="grid-item">
-        {% if video.isactive == 0 %}
-            <img src="{{url_for('static', filename='empty.png')}}" />
-        {% elif video.isactive == 1 %}
-            <video-js id="{{video.stream}}" class="vjs-default-skin" controls autoplay muted preload width="640"
-                height="360">
-                <source src="{{video.source}}" type="application/x-mpegURL">
+    {% for element in data %}
+        <!----  Stream -->
+        <div class="grid-item">
+            <video-js id="stream{{element.id}}" class="vjs-default-skin" controls autoplay muted preload  width="{{data2.width}}" height="{{data2.height}}">
+                <source src="{{element.video_src}}" type="application/x-mpegURL">
             </video-js>
             <script>
-                var player = videojs('{{video.stream}}');
+                var player = videojs('stream{{element.id}}');
             </script>
-        {% endif %}
-
-        <table>
-            <tr>
-                {% if video.isactive == 0 %}
-                <td>
-                    <form action="{{ url_for('play') }}" id="play" method="POST">
-                        <input type="hidden" name="video" value="{{video.stream}}">
-                        <input type="submit" class="button" value="Play">
-                    </form>
-                </td>
-                {% elif video.isactive == 1 %}
-                <td>
-                    <form action="{{ url_for('stop') }}" id="stop" method="POST">
-                        <input type="hidden" name="video" value="{{video.stream}}">
-                        <input type="submit" class="button" value="Stop">
-                    </form>
-                </td>
-                <td>
-                    <form action="{{ url_for('restart') }}" id="restart" method="POST">
-                        <input type="hidden" name="video" value="{{video.stream}}">
-                        <input type="submit" class="button" value="Restart">
-                    </form>
-                </td>
-                {% endif %}
-                <td>
-                    <form action="{{ url_for('estatisticas') }}" id="estatisticas" method="POST">
-                        <input type="hidden" name="video" value="{{video.stream}}">
-                        <input type="submit" class="button" value="Estatísticas">
-                    </form>
-                </td>
-                <td>
-                    <h4 align="center">{{video.name}}</h4>
-                </td>
-            </tr>
-        </table>
-
-    </div>
+            <h4 align="center"><a href="">{{element.name}}</a></h4>
+        </div>
     {% endfor %}
 </div>
-
 {% endblock %}

@@ -17,6 +17,8 @@
     {% endif %}
 
     {% if current_user.is_authenticated %}
+      <a href="{{ url_for('video') }}">Video</a>
+      <a href="{{ url_for('config') }}">Config</a>
       Usuário: {{ current_user.username }}
       <a href="{{ url_for('login_bp.logout') }}">LogOut</a>
     {% endif %}

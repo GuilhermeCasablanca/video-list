@@ -1,0 +1,109 @@
+{% extends "template.html" %}
+
+{% block head %}
+<style>
+  #videos {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 20%;
+  }
+
+  #videos td,
+  #videos th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+
+  #videos tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  #videos tr:hover {
+    background-color: #ddd;
+  }
+
+  #videos th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+  }
+
+  table {
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div>
+  <h2>Orientação</h2>
+
+  <table id="orientacao">
+    <tr>
+      <td>
+        {{data2.orientacao}}
+      </td>
+      <td>
+        <form action="{{ url_for('config_edit_orientacao') }}" method="GET">
+          <input type="hidden" name="id" value="{{data2.id}}">
+          <input type="submit" value="Editar">
+        </form>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div id="tamanho">
+  <h2>Tamanho</h2>
+
+  <table>
+    <tr>
+      <td>
+        {{data2.width}} x {{data2.height}}
+      </td>
+      <td>
+        <form action="{{ url_for('config_edit_size') }}" method="GET">
+          <input type="hidden" name="id" value="{{data2.id}}">
+          <input type="submit" value="Editar">
+        </form>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div>
+  <p>
+  <h2>Vídeos</h2>
+  </p>
+  <div class="element">
+    {% for element in data %}
+    <table id="videos">
+      <tr>
+        <td>
+          <p>{{ loop.index }}</p>
+          <p>{{element.name}}</p>
+          <p>{{element.video_src}}</p>
+        </td>
+        <td>
+          <form action="{{ url_for('config_edit') }}" method="GET">
+            <input type="hidden" name="id" value="{{element.id}}">
+            <input type="submit" value="Editar">
+          </form>
+        </td>
+        <!--
+          <td>
+            <form action="{{ url_for('config_delete') }}" method="GET">
+              <input type="hidden" name="id" value="{{element.id}}">
+              <input type="submit" value="Deletar">
+            </form>
+          </td>
+          -->
+      </tr>
+    </table>
+
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

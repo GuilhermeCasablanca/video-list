@@ -2,16 +2,23 @@
 
 {% block head %}
 <style>
-  .center {
-    margin: auto;
-    width: 50%;
+  form
+  {
+    display: inline-block;
+  }
+  fieldset{
+    margin: 0 auto;
+    width: 600px;
+    text-align: center;
   }
 </style>
 {% endblock %}
 
 {% block content %}
 
-<div class="center">
+<div class="login" >
+  <img src="/static/logo.png">
+
   <h2 class="title">Login</h2>
 
   <div class="form">
@@ -26,6 +33,5 @@
     </form>
   </div>
 </div>
-
 
 {% endblock %}

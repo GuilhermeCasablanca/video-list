@@ -1,0 +1,22 @@
+{% extends "template.html" %}
+{% block content %}
+
+<h2>Editar orientação</h2>
+
+Orientações possíveis:<br>
+auto<br>
+auto auto<br>
+auto auto auto<br><br>
+
+<div class="form">
+  {% from "_formhelpers.html" import render_field %}
+  <form method="POST">
+    <fieldset>
+      {{ form.csrf_token }}
+      {{ render_field(form.orientacao) }}
+      {{ form.submit }}
+    </fieldset>
+  </form>
+</div>
+
+{% endblock %}

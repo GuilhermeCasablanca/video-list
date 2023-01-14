@@ -1,0 +1,20 @@
+{% extends "template.html" %}
+{% block content %}
+
+<h3>Cadastrar vídeo</h3>
+
+<div class="form">
+{% from "_formhelpers.html" import render_field %}
+  <form method="POST" class="form">
+    <fieldset>
+      {{ form.csrf_token }}
+      {{ render_field(form.username, autocomplete="new-password") }}
+      {{ render_field(form.email) }}
+      {{ render_field(form.password, autocomplete="new-password") }}
+      {{ render_field(form.isadmin) }}
+      {{ form.submit }}
+    </fieldset>
+  </form>
+</div>
+
+{% endblock %}

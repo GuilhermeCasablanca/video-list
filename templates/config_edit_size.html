@@ -1,0 +1,22 @@
+{% extends "template.html" %}
+{% block content %}
+
+<h2>Editar tamanho do vídeo</h2>
+
+Exemplo de resolução widescreen:<br>
+624x351<br>
+640x360<br>
+
+<div class="form">
+  {% from "_formhelpers.html" import render_field %}
+  <form method="POST">
+    <fieldset>
+      {{ form.csrf_token }}
+      {{ render_field(form.width) }}
+      {{ render_field(form.height) }}
+      {{ form.submit }}
+    </fieldset>
+  </form>
+</div>
+
+{% endblock %}

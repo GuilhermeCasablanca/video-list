@@ -1,8 +1,12 @@
-from flask import Flask, redirect, render_template, url_for, send_from_directory, request
+from flask import Flask, redirect, render_template, url_for
+from flask import render_template, Flask, send_from_directory, request
 from flask_login import login_required
-from models import VideoModel, db
+from forms import OrientacaoForm, SizeForm, StreamForm
+from models import ConfigModel, db
 from blueprints.login.login_bp import login_bp, login_manager
 from blueprints.admin.admin_bp import admin_bp
+from crud import Crud
+from models import StreamModel
 
 app = Flask(__name__)
 
@@ -18,7 +22,7 @@ def add_header(response):
 @app.route('/videos/<string:stream>/<string:master>')
 @login_required
 def stream(stream,master):
-    video_dir = '/var/www/html/'+stream
+    video_dir = '/DATA/opt/STREAMS/'+stream
     print(video_dir)
     print(master)
     return send_from_directory(directory=video_dir, path=master, as_attachment=True)
@@ -28,29 +32,17 @@ app.config['SECRET_KEY'] = '&nV=A8-xza?LDgd'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/banco.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Inicia database e login
+# Inicia app
 db.init_app(app)
 login_manager.init_app(app)
+
+# Inicia database
+with app.app_context():
+    db.create_all()
 
 # Inicia blueprints
 app.register_blueprint(login_bp)
 app.register_blueprint(admin_bp)
-
-# Inicia database
-
-with app.app_context():
-    db.create_all()
-
-    db.session.query(VideoModel).delete()
-
-    db.session.add(VideoModel('Jogo 01 - Sinal Internacional', 'stream1', '/videos/stream1/master.m3u8'))
-    db.session.add(VideoModel('Jogo 02 - Sinal Internacional', 'stream2', '/videos/stream2/master.m3u8'))
-    db.session.add(VideoModel('Jogo 03 - Sinal Internacional', 'stream3', '/videos/stream3/master.m3u8'))
-    db.session.add(VideoModel('Jogo 04 - Sinal Internacional', 'stream4', '/videos/stream4/master.m3u8'))
-    db.session.add(VideoModel('Jogo 05 - Youtube', 'stream5', '/videos/stream5/master.m3u8'))
-    db.session.add(VideoModel('Jogo 06 - Centauro', 'stream6', '/videos/stream6/master.m3u8'))
-
-    db.session.commit()
 
 @app.route('/')
 @app.route('/index')
@@ -60,57 +52,69 @@ def index():
 @app.route('/video')
 @login_required
 def video():
-    return render_template('video.html', data=VideoModel.query.all())
+    crud = Crud()
+    data = crud.retrieve_all(StreamModel)
+    data2 = crud.retrieve_one(1, ConfigModel)
+    return render_template('video.html', data=data, data2=data2)
 
-@app.route('/play', methods=['POST', 'GET'])
+@app.route('/config', methods=['GET', 'POST'])
 @login_required
-def play():
-    if request.method == "POST":
-        stream = request.form.get('video')
+def config():
+    crud = Crud()
+    data = crud.retrieve_all(StreamModel)
+    data2 = crud.retrieve_one(1, ConfigModel)
+    return render_template('config.html', data=data, data2=data2)
 
-        query = VideoModel.query.filter_by(stream=stream).first()
-        query.isactive = 1
-        db.session.commit()
-
-    return redirect(url_for('video'))
-
-@app.route('/stop', methods=['POST', 'GET'])
+@app.route('/config_edit', methods=['GET', 'POST'])
 @login_required
-def stop():
-    if request.method == "POST":
-        stream = request.form.get('video')
+def config_edit():
+    crud = Crud()
+    id=request.args.get('id')
+    stream = crud.retrieve_one(id, StreamModel)
+    form = StreamForm(name=stream.name, video_src=stream.video_src)
+    if form.validate_on_submit():
+        stream.set_name(form.name.data)
+        stream.set_video_src(form.video_src.data)
+        crud.update('')
+        return redirect(url_for('config'))
+    return render_template('config_edit.html', form=form)
 
-        query = VideoModel.query.filter_by(stream=stream).first()
-        query.isactive = 0
-        db.session.commit()
-
-    return redirect(url_for('video'))
-
-@app.route('/restart', methods=['POST', 'GET'])
+@app.route('/config_edit_orientacao', methods=['GET', 'POST'])
 @login_required
-def restart():
-    if request.method == "POST":
-        stream = request.form.get('video')
-        
-        query = VideoModel.query.filter_by(stream=stream).first()
-        query.isactive = 1
-        db.session.commit()
+def config_edit_orientacao():
+    crud = Crud()
+    id=request.args.get('id')
+    config = crud.retrieve_one(id, ConfigModel)
+    form = OrientacaoForm(orientacao=config.orientacao)
+    if form.validate_on_submit():
+        config.set_orientacao(form.orientacao.data)
+        crud.update('')
+        return redirect(url_for('config'))
+    return render_template('config_edit_orientacao.html', form=form)
 
-    return redirect(url_for('video'))
-
-@app.route('/estatisticas', methods=['POST', 'GET'])
+@app.route('/config_edit_size', methods=['GET', 'POST'])
 @login_required
-def estatisticas():
-    if request.method == "POST":
-        stream = request.form.get('video')
-        
-    return redirect(url_for('video'))
+def config_edit_size():
+    crud = Crud()
+    id=request.args.get('id')
+    config = crud.retrieve_one(id, ConfigModel)
+    form = SizeForm(width=config.width, height=config.height)
+    if form.validate_on_submit():
+        config.set_width(form.width.data)
+        config.set_height(form.height.data)
+        crud.update('')
+        return redirect(url_for('config'))
+    return render_template('config_edit_size.html', form=form)
 
+@app.route('/config_delete', methods=['GET', 'POST'])
+@login_required
+def config_delete():
+    crud = Crud()
+    return render_template('config_delete.html', data=crud.retrieve_all(StreamModel))
 
 # Main
 if __name__ == '__main__':  
     app.run(host='0.0.0.0', port=5000)
-
 
 # * python -m flask
 # flask run

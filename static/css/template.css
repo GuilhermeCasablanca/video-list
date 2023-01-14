@@ -2,11 +2,6 @@
     text-align: right;
 }
 
-body {
-    background-color: rgb(18, 18, 18);
-    color:whitesmoke
-}
-
-a {
-    color:rgb(0, 102, 255)
+.content {
+    text-align: center;
 }
