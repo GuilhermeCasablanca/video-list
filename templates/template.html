@@ -15,11 +15,11 @@
     
     {% if current_user.is_authenticated and current_user.isadmin %}
       <a href="{{ url_for('admin_bp.admin') }}" id="admin">Admin</a>
+      <a href="{{ url_for('config') }}">Config</a>
     {% endif %}
    
     {% if current_user.is_authenticated %}
-      <a href="{{ url_for('video') }}">Video</a>
-      <a href="{{ url_for('config') }}">Config</a>
+      <a href="{{ url_for('video') }}">Vídeo</a>
       Usuário: {{ current_user.username }}
       <a href="{{ url_for('login_bp.logout') }}">LogOut</a>
     {% endif %}
