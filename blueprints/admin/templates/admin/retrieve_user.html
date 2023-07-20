@@ -5,14 +5,14 @@
 <h2>Usuários cadastrados</h2>
 </p>
 
-<div id="" class="element" style="width:50%">
+<div id="">
   <hr>
   {% for user in data %}
   <p>{{user.username}}</p>
   <p>{{user.email}}</p>
   <p>admin {{user.isadmin}}</p>
 
-  <table>
+  <table class="centerTable">
     <tr>
       <td>
         <form action="{{ url_for('admin_bp.update_email') }}" method="GET">
